@@ -16,7 +16,8 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   var books = Books.getAllBooks()
   var filteredBooks = [Book]()
   var searchTimer: Timer?
-
+  var searchTask: DispatchWorkItem?
+  
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -51,15 +52,32 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   //MARK:- Search delegate methods
   
   func updateSearchResults(for searchController: UISearchController) {
-    self.searchTimer?.invalidate()
     guard let searchText = searchController.searchBar.text else { return }
+//    applyTimerSearch(searchText: searchText)
+    applyDispatchSearch(searchText: searchText)
+  }
+  
+  //MARK:- Custom Methods
+  
+  private func applyTimerSearch(searchText: String) {
+    self.searchTimer?.invalidate()
     /// 0.5 is the wait or idle time for execution of the function applyFilter
     searchTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false, block: { [weak self] (timer) in
       self?.applyFilter(with: searchText)
     })
   }
   
-  //MARK:- Custom Methods
+  private func applyDispatchSearch(searchText: String) {
+    self.searchTask?.cancel()
+    
+    let task = DispatchWorkItem { [weak self] in
+      self?.applyFilter(with: searchText)
+    }
+    self.searchTask = task
+    
+    /// 0.5 is the wait or idle time for execution of the function applyFilter
+    DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
+  }
   
   /*
    We are implementing a wildcard search so we would split the searchtext into multiple words and search each word in the sentance searchDesc
