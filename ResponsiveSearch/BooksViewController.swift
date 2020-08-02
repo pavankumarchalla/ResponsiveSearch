@@ -7,6 +7,8 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 
 class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
   
@@ -17,7 +19,8 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   var filteredBooks = [Book]()
   var searchTimer: Timer?
   var searchTask: DispatchWorkItem?
-  
+  let disposeBag = DisposeBag()
+
   override func viewDidLoad() {
     super.viewDidLoad()
     
@@ -54,7 +57,8 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   func updateSearchResults(for searchController: UISearchController) {
     guard let searchText = searchController.searchBar.text else { return }
 //    applyTimerSearch(searchText: searchText)
-    applyDispatchSearch(searchText: searchText)
+//    applyDispatchSearch(searchText: searchText)
+    applyRxSwiftSearch(searchText: searchText)
   }
   
   //MARK:- Custom Methods
@@ -77,6 +81,16 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     /// 0.5 is the wait or idle time for execution of the function applyFilter
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
+  }
+    
+  private func applyRxSwiftSearch(searchText: String) {
+    searchController.searchBar
+    .rx.text // Observable property thanks to RxCocoa
+    .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Wait 0.5 for changes.
+    .subscribe(onNext: { [unowned self] query in // Here we subscribe to every new value, that is not empty (thanks to filter above).
+      self.applyFilter(with: "\(query ?? "")")
+    })
+    .disposed(by: disposeBag)
   }
   
   /*
