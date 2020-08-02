@@ -87,7 +87,7 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     searchController.searchBar
     .rx.text // Observable property thanks to RxCocoa
     .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Wait 0.5 for changes.
-    .subscribe(onNext: { [unowned self] query in // Here we subscribe to every new value, that is not empty (thanks to filter above).
+    .subscribe(onNext: { [unowned self] query in // Here we subscribe to every new value
       self.applyFilter(with: "\(query ?? "")")
     })
     .disposed(by: disposeBag)
