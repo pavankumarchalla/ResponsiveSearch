@@ -22,7 +22,7 @@ enum SearchTypes: Int {
 }
 
 protocol SearchTypeSelection: class {
-  func didSelectFilterAction(_ filter: SearchTypes)
+  func didSelectSearchAction(type: SearchTypes)
 }
 
 class SearchTypeTableViewController: UITableViewController {
@@ -56,6 +56,7 @@ class SearchTypeTableViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "SearchActionCell", for: indexPath)
     let action = actions[indexPath.row]
+    cell.selectionStyle = .none
     cell.textLabel?.text = action.displayString
     return cell
   }
@@ -63,13 +64,8 @@ class SearchTypeTableViewController: UITableViewController {
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     let action = actions[indexPath.row]
     self.currentFilter = action
-    delegate?.didSelectFilterAction(action)
+    delegate?.didSelectSearchAction(type: action)
     mainContainer?.hideFilterMenu()
-  }
-  
-  override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    cell.backgroundColor = UIColor.clear
-    cell.selectedBackgroundView = self.selectedBackgroundView
   }
   
 }

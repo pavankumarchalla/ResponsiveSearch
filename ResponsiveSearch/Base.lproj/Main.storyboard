@@ -90,7 +90,7 @@
                                     <constraint firstAttribute="width" constant="170" id="OpG-BB-5RJ"/>
                                 </constraints>
                                 <connections>
-                                    <segue destination="1zr-Ke-KBS" kind="embed" id="pB7-Rg-kvu"/>
+                                    <segue destination="1zr-Ke-KBS" kind="embed" identifier="SearchMenuEmbedSegue" id="pB7-Rg-kvu"/>
                                 </connections>
                             </containerView>
                         </subviews>
@@ -135,7 +135,7 @@
                                 <rect key="frame" x="0.0" y="28" width="170" height="43.5"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="tn1-tQ-F7p" id="Ags-EM-F6G">
-                                    <rect key="frame" x="0.0" y="0.0" width="150" height="43.5"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="170" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                             </tableViewCell>

@@ -10,7 +10,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
+class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, SearchTypeSelection {
   
   @IBOutlet weak var tableView: UITableView!
   @IBOutlet weak var booksSearchTypeHeightConstraint: NSLayoutConstraint!
@@ -21,7 +21,9 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   var searchTimer: Timer?
   var searchTask: DispatchWorkItem?
   let disposeBag = DisposeBag()
-  
+  var searchType = SearchTypes.timer
+  var searchMenuTableViewController: SearchTypeTableViewController?
+
   lazy var blurView: UIView = {
     let view = UIView(frame: self.tableView.frame)
     view.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.3)
@@ -65,9 +67,26 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   
   func updateSearchResults(for searchController: UISearchController) {
     guard let searchText = searchController.searchBar.text else { return }
-//    applyTimerSearch(searchText: searchText)
-//    applyDispatchSearch(searchText: searchText)
-    applyRxSwiftSearch(searchText: searchText)
+    
+    switch searchType {
+      case .timer:
+      applyTimerSearch(searchText: searchText)
+      
+      case .dispatchQueue:
+      applyDispatchSearch(searchText: searchText)
+      
+      case .rxswift:
+      applyRxSwiftSearch(searchText: searchText)
+      
+      case .combine:
+      print("search type combine")
+    }
+  }
+  
+  //MARK:- SearchType methods
+  
+  func didSelectSearchAction(type: SearchTypes) {
+    searchType = type
   }
   
   //MARK:- IBAction methods
@@ -77,6 +96,22 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
       showFilterMenu()
     } else {
       hideFilterMenu()
+    }
+  }
+  
+  //MARK:- Segue
+  
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if segue.identifier == "SearchMenuEmbedSegue" {
+      if let _ = self.searchMenuTableViewController {
+        return
+      }
+      
+      if let searchTVC = segue.destination as? SearchTypeTableViewController {
+        searchTVC.delegate = self;
+        searchTVC.mainContainer = self;
+        self.searchMenuTableViewController = searchTVC
+      }
     }
   }
   
@@ -157,4 +192,3 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   }
   
 }
-
