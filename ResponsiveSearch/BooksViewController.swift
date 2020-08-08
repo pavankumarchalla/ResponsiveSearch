@@ -13,6 +13,7 @@ import RxCocoa
 class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
   
   @IBOutlet weak var tableView: UITableView!
+  @IBOutlet weak var booksSearchTypeHeightConstraint: NSLayoutConstraint!
   
   let searchController = UISearchController(searchResultsController: nil)
   var books = Books.getAllBooks()
@@ -20,6 +21,14 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   var searchTimer: Timer?
   var searchTask: DispatchWorkItem?
   let disposeBag = DisposeBag()
+  
+  lazy var blurView: UIView = {
+    let view = UIView(frame: self.tableView.frame)
+    view.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.3)
+    let tap = UITapGestureRecognizer(target: self, action: #selector(hideFilterMenu))
+    view.addGestureRecognizer(tap)
+    return view
+  }()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -59,6 +68,16 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
 //    applyTimerSearch(searchText: searchText)
 //    applyDispatchSearch(searchText: searchText)
     applyRxSwiftSearch(searchText: searchText)
+  }
+  
+  //MARK:- IBAction methods
+  
+  @IBAction func menuBtnClicked(_ sender: UIBarButtonItem) {
+    if booksSearchTypeHeightConstraint.constant == 0 {
+      showFilterMenu()
+    } else {
+      hideFilterMenu()
+    }
   }
   
   //MARK:- Custom Methods
@@ -110,6 +129,30 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
       DispatchQueue.main.async {
         self?.tableView.reloadData()
       }
+    }
+  }
+  
+  func showFilterMenu() {
+    if self.booksSearchTypeHeightConstraint.constant == 0 {
+      booksSearchTypeHeightConstraint.constant = 176
+      self.view.insertSubview(self.blurView, aboveSubview: self.tableView)
+      UIView.animate(withDuration: 0.2, animations: { () -> Void in
+        self.view.layoutIfNeeded()
+      }, completion: { (Bool) -> Void in
+        // complete
+      })
+    }
+  }
+  
+  @objc func hideFilterMenu() {
+    if self.booksSearchTypeHeightConstraint.constant != 0 {
+      booksSearchTypeHeightConstraint.constant = 0
+      self.blurView.removeFromSuperview()
+      UIView.animate(withDuration: 0.2, animations: { () -> Void in
+        self.view.layoutIfNeeded()
+      }, completion: { (Bool) -> Void in
+        // complete
+      })
     }
   }
   

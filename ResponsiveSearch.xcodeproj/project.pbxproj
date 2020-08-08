@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		D8085FAA24CE0601005818F9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D8085FA824CE0601005818F9 /* LaunchScreen.storyboard */; };
 		D8085FB224CE084A005818F9 /* BooksTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8085FB124CE084A005818F9 /* BooksTableViewCell.swift */; };
 		D8085FB424CE08E1005818F9 /* Books.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8085FB324CE08E1005818F9 /* Books.swift */; };
+		D8BF6A2324DF2FFF00C24B6E /* SearchTypeTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BF6A2224DF2FFF00C24B6E /* SearchTypeTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -31,6 +32,7 @@
 		D8085FAB24CE0601005818F9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D8085FB124CE084A005818F9 /* BooksTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BooksTableViewCell.swift; sourceTree = "<group>"; };
 		D8085FB324CE08E1005818F9 /* Books.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Books.swift; sourceTree = "<group>"; };
+		D8BF6A2224DF2FFF00C24B6E /* SearchTypeTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTypeTableViewController.swift; sourceTree = "<group>"; };
 		F56F46037EC013B229541501 /* Pods-ResponsiveSearch.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ResponsiveSearch.debug.xcconfig"; path = "Target Support Files/Pods-ResponsiveSearch/Pods-ResponsiveSearch.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -60,7 +62,6 @@
 				F56F46037EC013B229541501 /* Pods-ResponsiveSearch.debug.xcconfig */,
 				544951DA55B95834A84AC045 /* Pods-ResponsiveSearch.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -94,6 +95,7 @@
 				D8085FA624CE0601005818F9 /* Assets.xcassets */,
 				D8085FA824CE0601005818F9 /* LaunchScreen.storyboard */,
 				D8085FAB24CE0601005818F9 /* Info.plist */,
+				D8BF6A2224DF2FFF00C24B6E /* SearchTypeTableViewController.swift */,
 			);
 			path = ResponsiveSearch;
 			sourceTree = "<group>";
@@ -216,6 +218,7 @@
 				D8085FB224CE084A005818F9 /* BooksTableViewCell.swift in Sources */,
 				D8085FA224CE05FD005818F9 /* BooksViewController.swift in Sources */,
 				D8085F9E24CE05FD005818F9 /* AppDelegate.swift in Sources */,
+				D8BF6A2324DF2FFF00C24B6E /* SearchTypeTableViewController.swift in Sources */,
 				D8085FA024CE05FD005818F9 /* SceneDelegate.swift in Sources */,
 				D8085FB424CE08E1005818F9 /* Books.swift in Sources */,
 			);
