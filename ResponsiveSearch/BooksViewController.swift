@@ -79,7 +79,7 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
       applyRxSwiftSearch(searchText: searchText)
       
       case .combine:
-      print("search type combine")
+      applyCombineSearch(searchText: searchText)
     }
   }
   
@@ -145,6 +145,19 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
       self.applyFilter(with: "\(query ?? "")")
     })
     .disposed(by: disposeBag)
+  }
+  
+  private func applyCombineSearch(searchText: String) {
+//    var searchstr = ""
+//    let publisher = NotificationCenter.default.publisher(for: UISearchTextField.textDidChangeNotification, object: searchController.searchBar.searchTextField)
+//    publisher
+//      .map {
+//        ($0.object as! UISearchTextField).text
+//    }
+//    .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+//    .sink(receiveValue: { (str) in
+//      searchstr.append(str ?? "")
+//    })
   }
   
   /*
