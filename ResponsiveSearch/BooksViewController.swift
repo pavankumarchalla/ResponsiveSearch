@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Combine
 
 class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, SearchTypeSelection {
   
@@ -23,7 +24,8 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
   let disposeBag = DisposeBag()
   var searchType = SearchTypes.timer
   var searchMenuTableViewController: SearchTypeTableViewController?
-
+  var cancellable = [AnyCancellable]()
+  
   lazy var blurView: UIView = {
     let view = UIView(frame: self.tableView.frame)
     view.backgroundColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.3)
@@ -42,6 +44,8 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     self.tableView.tableHeaderView = searchController.searchBar
     self.tableView.tableFooterView = UIView()
     self.tableView.estimatedRowHeight = UITableView.automaticDimension
+    applyCombineSearch()
+    applyRxSwiftSearch()
   }
   
   //MARK:- UITableview Delegate and Datasource methods
@@ -71,15 +75,12 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     switch searchType {
       case .timer:
       applyTimerSearch(searchText: searchText)
-      
+
       case .dispatchQueue:
       applyDispatchSearch(searchText: searchText)
-      
-      case .rxswift:
-      applyRxSwiftSearch(searchText: searchText)
-      
-      case .combine:
-      applyCombineSearch(searchText: searchText)
+
+      default:
+      break
     }
   }
   
@@ -137,27 +138,30 @@ class BooksViewController: UIViewController, UITableViewDelegate, UITableViewDat
     DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
   }
     
-  private func applyRxSwiftSearch(searchText: String) {
+  private func applyRxSwiftSearch() {
     searchController.searchBar
     .rx.text // Observable property thanks to RxCocoa
     .debounce(.milliseconds(500), scheduler: MainScheduler.instance) // Wait 0.5 for changes.
     .subscribe(onNext: { [unowned self] query in // Here we subscribe to every new value
-      self.applyFilter(with: "\(query ?? "")")
+      if self.searchType == .rxswift {
+        self.applyFilter(with: "\(query ?? "")")
+      }
     })
     .disposed(by: disposeBag)
   }
   
-  private func applyCombineSearch(searchText: String) {
-//    var searchstr = ""
-//    let publisher = NotificationCenter.default.publisher(for: UISearchTextField.textDidChangeNotification, object: searchController.searchBar.searchTextField)
-//    publisher
-//      .map {
-//        ($0.object as! UISearchTextField).text
-//    }
-//    .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
-//    .sink(receiveValue: { (str) in
-//      searchstr.append(str ?? "")
-//    })
+  private func applyCombineSearch() {
+    let publisher = NotificationCenter.default.publisher(for: UISearchTextField.textDidChangeNotification, object: searchController.searchBar.searchTextField)
+    publisher
+      .map {
+        ($0.object as! UISearchTextField).text
+    }
+    .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
+    .sink(receiveValue: { (str) in
+      if self.searchType == .combine {
+        self.applyFilter(with: str ?? "")
+      }
+    }).store(in: &cancellable)
   }
   
   /*
