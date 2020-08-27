@@ -1,6 +1,8 @@
 # ResponsiveSearch
 This project demonstrates different ways of achieving debounce in Swift/iOS.
 
+Here is my blog to know more about debounce
+https://medium.com/tarkalabs/all-about-debounce-4-ways-to-achieve-debounce-in-swift-e8f8ce22f544
 
 #### Installation Guide
 
